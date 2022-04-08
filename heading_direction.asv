@@ -6,12 +6,9 @@ load('Data/heading_testing.mat');
 time = MagneticField.Timestamp;
 vectorLen = length(time);
 
-Orientationx = Orientation.X;
-Orientationx = Orientationx(1:vectorLen);
-Orientationy = Orientation.Y;
-Orientationy = Orientationy(1:vectorLen);
-Orientationz = Orientation.Z * 180.0/pi;
-Orientationz = Orientationz(1:vectorLen);
+Orientationx
+Orientationy
+Orientationz
 
 
 Bx = MagneticField.X;
@@ -89,9 +86,3 @@ plot(t, gyroAzimuth, 'LineWidth', 1);
 xlabel('Time (sec)');
 ylabel('Heading Angle (deg)');
 title("Heading Direction Relative to North using Gyro");
-
-fig5 = figure();
-plot(t, Orientationx, 'LineWidth', 1);
-xlabel('Time (sec)');
-ylabel('Heading Angle (deg)');
-title("True Heading Direction");
