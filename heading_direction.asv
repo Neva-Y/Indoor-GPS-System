@@ -22,7 +22,7 @@ Wy = AngularVelocity.Y;
 Wz = AngularVelocity.Z;
 W = [Wx Wy Wz];
 yawEstimate = cumtrapz(Wz);
-gyroAzimuth = initialHeading + yawEstimate
+gyroAzimuth = initialHeadingyawEstimate
 
 
 initial_min = double(minute(time(1)));
@@ -65,10 +65,7 @@ fig3 = figure();
 plot(t, azimuth, 'LineWidth', 1);
 xlabel('Time (sec)');
 ylabel('Heading Angle (deg)');
-title("Heading Direction Relative to North using Magnetometer");
+title("Heading Direction Relative to North");
 
 fig4 = figure();
-plot(t, gyroAzimuth(1:870), 'LineWidth', 1);
-xlabel('Time (sec)');
-ylabel('Heading Angle (deg)');
-title("Heading Direction Relative to North using Gyro");
+plot(t, gyroAzimuth(1:870));
