@@ -1,12 +1,12 @@
 clc
 clear all
 close all
-load('Data/heading_testing2.mat');
+load('Data/heading_north.mat');
 
 time = MagneticField.Timestamp;
 vectorLen = length(time);
 
-Orientationx = Orientation.X;
+Orientationx = -Orientation.X;
 Orientationx = Orientationx(1:vectorLen);
 Orientationy = Orientation.Y;
 Orientationy = Orientationy(1:vectorLen);
@@ -96,3 +96,13 @@ plot(t, Orientationx, 'LineWidth', 1);
 xlabel('Time (sec)');
 ylabel('Heading Angle (deg)');
 title("True Heading Direction");
+
+fig5= figure();
+plot(t, gyroAzimuth, 'LineWidth', 1);
+hold on 
+plot(t, azimuth, 'LineWidth', 1);
+plot(t, Orientationx, 'LineWidth', 1);
+title("Heading Direction");
+xlabel('Time (sec)');
+ylabel('Heading Angle (deg)');
+legend('Gyro','Magnetometer','True')
