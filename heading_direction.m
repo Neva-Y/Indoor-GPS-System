@@ -1,18 +1,11 @@
 clc
 clear all
 close all
-load('Data/heading_north.mat');
+load('Data/heading_testing.mat');
 
 time = MagneticField.Timestamp;
-vectorLen = length(time);
-
-Orientationx = -Orientation.X;
-Orientationx = Orientationx(1:vectorLen);
-Orientationy = Orientation.Y;
-Orientationy = Orientationy(1:vectorLen);
-Orientationz = Orientation.Z;
-Orientationz = Orientationz(1:vectorLen);
-
+vectorLen = min([length(time), length(AngularVelocity.X), ...
+    length(Orientation.X), length(MagneticField.X)]);
 
 Bx = MagneticField.X;
 By = MagneticField.Y;
@@ -30,6 +23,15 @@ BBz = B_cal(:,3);
 BBz = BBz(1:vectorLen);
 azimuth = atan2(BBx, BBy) * 180.0/pi;
 initialHeading = azimuth(1);
+
+
+Orientationx = -Orientation.X;
+Orientationx = Orientationx(1:vectorLen);
+Orientationy = Orientation.Y;
+Orientationy = Orientationy(1:vectorLen);
+Orientationz = Orientation.Z;
+Orientationz = Orientationz(1:vectorLen);
+Orientationx = Orientationx + initialHeading;
 
 Wx = AngularVelocity.X;
 Wx = Wx(1:vectorLen);
@@ -53,15 +55,15 @@ for i=1:length(time)
         t(i) = double(second(time(i)))-initial_sec;
     end
 end
-
+t = t(1:vectorLen);
 
 
 fig1 = figure();
-plot(t,B_cal(:,1), 'LineWidth', 1)
+plot(t,BBx, 'LineWidth', 1)
 hold on
 grid on
-plot(t,B_cal(:,2), 'LineWidth', 1)
-plot(t,B_cal(:,3), 'LineWidth', 1)
+plot(t,BBy, 'LineWidth', 1)
+plot(t,BBz, 'LineWidth', 1)
 xlabel('Time (sec)');
 ylabel('Magnetic Field (T)');
 legend('x','y','z');
