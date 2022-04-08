@@ -1,7 +1,7 @@
 clc
 clear all
 close all
-load('Data/heading_testing.mat');
+load('Data/heading_north_test.mat');
 
 time = MagneticField.Timestamp;
 vectorLen = min([length(time), length(AngularVelocity.X), ...
@@ -11,7 +11,7 @@ Bx = MagneticField.X;
 By = MagneticField.Y;
 Bz = MagneticField.Z;
 B = [Bx By Bz];
-B = B * 10^-6;
+B = B*10^-6;
 
 [A,b,expmfs] = magcal(B);
 B_cal = (B-b)*A;
@@ -31,7 +31,8 @@ Orientationy = Orientation.Y;
 Orientationy = Orientationy(1:vectorLen);
 Orientationz = Orientation.Z;
 Orientationz = Orientationz(1:vectorLen);
-Orientationx = Orientationx + initialHeading;
+offset = Orientationx(1) - initialHeading;
+Orientationx = Orientationx - offset;
 
 Wx = AngularVelocity.X;
 Wx = Wx(1:vectorLen);
@@ -107,4 +108,4 @@ plot(t, Orientationx, 'LineWidth', 1);
 title("Heading Direction");
 xlabel('Time (sec)');
 ylabel('Heading Angle (deg)');
-legend('Gyro','Magnetometer','True')
+legend('Gyro','Magnetometer','True Heading')
