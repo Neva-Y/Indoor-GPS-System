@@ -68,32 +68,33 @@ end
 Fs = 50;
 dt = 1/Fs;
 
-% Noise and Measurement Error
-Q = 12.0071;
-R = 8.1241;
+% Noise
+v = 1;
+w = 1;
+Q = 0;
 
 %Initialise Covariance
 P = 1;
 
 %Initial state
-z = azimuth;
+z = OrientationX;
 x = zeros(vectorLen);
 u = Wz;
 x(1) = initialHeading;
 F = 1;
 G = dt;
 H = 1;
-
+R = 1;
 
 t = t(1:vectorLen);
 
 for i = 2:vectorLen
     x(i) = F * x(i-1) + G * u(i-1);
     P = F * P * F' + Q;
-    K = P * H' * inv(H * P * H' + R);
+    K = P * H' * inv(H * P* H' + R);
     
     
-    x(i) = x(i) + K * (z(i) - H*x(i));
+    x(i) = x(i) + K * (OrientationX(i) - H*x(i));
     P = P - K * H * P;
 end
 
@@ -144,8 +145,7 @@ plot(t, gyroAzimuth, 'LineWidth', 1);
 hold on 
 plot(t, azimuth, 'LineWidth', 1);
 plot(t, Orientationx, 'LineWidth', 1);
-plot(t, x, 'LineWidth', 1);
 title("Heading Direction");
 xlabel('Time (sec)');
 ylabel('Heading Angle (deg)');
-legend('Gyro','Magnetometer','True Heading', 'Kalman Prediction')
+legend('Gyro','Magnetometer','True Heading')
