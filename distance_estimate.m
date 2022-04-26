@@ -3,7 +3,7 @@ clear
 close all
 
 % Load in walking data
-load('Data\walk2020.mat')
+load('Data\running40.mat')
 time = Acceleration.Timestamp;
 
 % Conversion of date-time format to seconds starting from 0
