@@ -1,4 +1,4 @@
-load('Data/kitchenwalk.mat');
+load('Data/oldeng2.mat');
 
 
 time = MagneticField.Timestamp;
@@ -61,7 +61,9 @@ for i=1:length(time)
     elseif currentmin == initial_min + 2
         t(i) = double(second(time(i))) + 120 - initial_sec;
     elseif currentmin == initial_min + 3
-        t(i) = double(second(time(i))) + 180 - initial_sec;    
+        t(i) = double(second(time(i))) + 180 - initial_sec;
+    elseif currentmin == initial_min + 4
+        t(i) = double(second(time(i))) + 240 - initial_sec;    
     else
         t(i) = double(second(time(i)))-initial_sec;
     end
@@ -72,15 +74,15 @@ Fs = 50;
 dt = 1/Fs;
 
 % Noise and Measurement Error
-Q = 12.0071;
-R = 8.1241;
+Q = 1;
+R = 30000;
 
 %Initialise Covariance
 P = 1;
 
 %Initial state
 z = azimuth;
-x = zeros(vectorLen);
+x = zeros(vectorLen);   
 u = Wz;
 x(1) = initialHeading;
 F = 1;
@@ -142,12 +144,12 @@ end
 % ylabel('Heading Angle (deg)');
 % title("True Heading Direction");
 
-fig6= figure();
+fig6 = figure();
 plot(t, gyroAzimuth, 'LineWidth', 1);
 hold on 
 plot(t, azimuth, 'LineWidth', 1);
-plot(t, Orientationx, 'LineWidth', 1);
-plot(t, x, 'LineWidth', 1);
+plot(t, unwrap(Orientationx), 'LineWidth', 1);
+plot(t, x, 'LineWidth', 3);
 title("Heading Direction");
 xlabel('Time (sec)');
 ylabel('Heading Angle (deg)');

@@ -1,8 +1,8 @@
-% clc
-% clear all
-% close all
-% distance_estimate
-% heading_direction
+clc
+clear all
+close all
+distance_estimate
+heading_direction
 
 
 longditude = zeros(vectorLen);
@@ -24,3 +24,5 @@ end
 figure();
 plot(latitude, longditude)
 hold on
+[trueX, trueY] = Spherical2Azimuth(Position.latitude, Position.longitude, Position.latitude(1), Position.longitude(1), 0, 0, 6371000*pi);
+plot(-trueX, -trueY);
