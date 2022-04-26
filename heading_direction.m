@@ -1,7 +1,4 @@
-clc
-clear all
-close all
-load('Data/heading_north_test.mat');
+load('Data/kitchenwalk.mat');
 
 
 time = MagneticField.Timestamp;
@@ -22,7 +19,8 @@ BBy = B_cal(:,2);
 BBy = BBy(1:vectorLen);
 BBz = B_cal(:,3);
 BBz = BBz(1:vectorLen);
-azimuth = (2*pi - atan2(BBy, BBx)) * 180.0/pi;
+azimuth = (2*pi - atan2(BBy, BBx));
+azimuth = unwrap(azimuth) * 180/pi;
 initialHeading = azimuth(1);
 
 
@@ -47,7 +45,7 @@ W = W * 180.0/pi;
 
 % Gain for yaw due to to deflection of vertical axis due to the Earth
 % elipsoid
-yawGain = 1.2;
+yawGain = 1;
 
 yawEstimate = cumtrapz(Wz) * yawGain;
 gyroAzimuth = initialHeading + yawEstimate;
@@ -57,8 +55,13 @@ initial_min = double(minute(time(1)));
 initial_sec = double(second(time(1)));
 
 for i=1:length(time)
-    if double(minute(time(i)))>initial_min
+    currentmin = double(minute(time(i)));
+    if currentmin == initial_min + 1
         t(i) = double(second(time(i))) + 60 - initial_sec;
+    elseif currentmin == initial_min + 2
+        t(i) = double(second(time(i))) + 120 - initial_sec;
+    elseif currentmin == initial_min + 3
+        t(i) = double(second(time(i))) + 180 - initial_sec;    
     else
         t(i) = double(second(time(i)))-initial_sec;
     end
@@ -98,46 +101,46 @@ for i = 2:vectorLen
 end
 
 
-fig1 = figure();
-plot(t,BBx, 'LineWidth', 1)
-hold on
-grid on
-plot(t,BBy, 'LineWidth', 1)
-plot(t,BBz, 'LineWidth', 1)
-xlabel('Time (sec)');
-ylabel('Magnetic Field (T)');
-legend('x','y','z');
-title("Magnetic Field measured");
-
-fig2 = figure();
-plot(t,W(:,1), 'LineWidth', 1)
-hold on
-grid on
-plot(t,W(:,2), 'LineWidth', 1)
-plot(t,W(:,3), 'LineWidth', 1)
-xlabel('Time (sec)');
-ylabel('Angular Velocity (deg/s)');
-legend('x','y','z');
-title("Angular Velocity measured");
-
-
-fig3 = figure();
-plot(t, azimuth, 'LineWidth', 1);
-xlabel('Time (sec)');
-ylabel('Heading Angle (deg)');
-title("Heading Direction Relative to North using Magnetometer");
-
-fig4 = figure();
-plot(t, gyroAzimuth, 'LineWidth', 1);
-xlabel('Time (sec)');
-ylabel('Heading Angle (deg)');
-title("Heading Direction Relative to North using Gyro");
-
-fig5 = figure();
-plot(t, Orientationy, 'LineWidth', 1);
-xlabel('Time (sec)');
-ylabel('Heading Angle (deg)');
-title("True Heading Direction");
+% fig1 = figure();
+% plot(t,BBx, 'LineWidth', 1)
+% hold on
+% grid on
+% plot(t,BBy, 'LineWidth', 1)
+% plot(t,BBz, 'LineWidth', 1)
+% xlabel('Time (sec)');
+% ylabel('Magnetic Field (T)');
+% legend('x','y','z');
+% title("Magnetic Field measured");
+% 
+% fig2 = figure();
+% plot(t,W(:,1), 'LineWidth', 1)
+% hold on
+% grid on
+% plot(t,W(:,2), 'LineWidth', 1)
+% plot(t,W(:,3), 'LineWidth', 1)
+% xlabel('Time (sec)');
+% ylabel('Angular Velocity (deg/s)');
+% legend('x','y','z');
+% title("Angular Velocity measured");
+% 
+% 
+% fig3 = figure();
+% plot(t, azimuth, 'LineWidth', 1);
+% xlabel('Time (sec)');
+% ylabel('Heading Angle (deg)');
+% title("Heading Direction Relative to North using Magnetometer");
+% 
+% fig4 = figure();
+% plot(t, gyroAzimuth, 'LineWidth', 1);
+% xlabel('Time (sec)');
+% ylabel('Heading Angle (deg)');
+% title("Heading Direction Relative to North using Gyro");
+% 
+% fig5 = figure();
+% plot(t, Orientationy, 'LineWidth', 1);
+% xlabel('Time (sec)');
+% ylabel('Heading Angle (deg)');
+% title("True Heading Direction");
 
 fig6= figure();
 plot(t, gyroAzimuth, 'LineWidth', 1);

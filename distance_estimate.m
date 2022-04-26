@@ -1,9 +1,5 @@
-clc
-clear
-close all
-
 % Load in walking data
-load('Data\running40.mat')
+load('Data/kitchenwalk.mat')
 time = Acceleration.Timestamp;
 
 % Conversion of date-time format to seconds starting from 0
@@ -12,8 +8,13 @@ initial_sec = double(second(time(1)));
 t = zeros(length(time));
 
 for i=1:length(time)
-    if double(minute(time(i)))>initial_min
+    currentmin = double(minute(time(i)));
+    if currentmin == initial_min + 1
         t(i) = double(second(time(i))) + 60 - initial_sec;
+    elseif currentmin == initial_min + 2
+        t(i) = double(second(time(i))) + 120 - initial_sec;
+    elseif currentmin == initial_min + 3
+        t(i) = double(second(time(i))) + 180 - initial_sec;    
     else
         t(i) = double(second(time(i)))-initial_sec;
     end
@@ -177,10 +178,10 @@ if exist('steps','var')
         cumDistance(i) = currentDistance;
     end
     figure();
-    measuredDistance = 30;
+    %measuredDistance = 30;
     plot(t, cumDistance);
-    ylim([0 32]);
-    yline(measuredDistance, '-', 'Measured Distance');
+    %ylim([0 32]);
+    %yline(measuredDistance, '-', 'Measured Distance');
     title("Cumulative Distance")
     xlabel("Time (s)")
     ylabel("Distance (m)")
