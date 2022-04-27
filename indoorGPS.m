@@ -1,8 +1,8 @@
- clc
- clear all
- close all
- distance_estimate
- heading_direction
+clc
+clear all
+close all
+distance_estimate
+heading_direction
 
 longditude = zeros(vectorLen);
 latitude = zeros(vectorLen);
@@ -22,10 +22,19 @@ for i = 2:vectorLen
 end
 
 figure();
-plot(latitude, longditude)
+img = imread('oldeng.png');
+img = imrotate(img,0,'bilinear','crop');
+imagesc([-77 70], [-39 98], flipud(img));
+
+
 hold on
 [trueX, trueY] = Spherical2Azimuth(Position.latitude, Position.longitude, Position.latitude(1), Position.longitude(1), 0, 0, 6371000*pi);
-plot(-trueX, -trueY);
+
+plot(trueX, trueY, 'b-*','linewidth',1.5);
+plot(-latitude, -longditude,  'r-*','linewidth',1.5)
+
+set(gca,'ydir','normal');
+
 xlabel("Latitude (m)")
 xlabel("Longitude (m)")
 legend("Pedestrian Dead Reckoning", "GNSS location")

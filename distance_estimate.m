@@ -1,5 +1,5 @@
 % Load in walking data
-load('Data/oldeng2.mat')
+load('Data/walkwithtim.mat')
 time = Acceleration.Timestamp;
 
 % Conversion of date-time format to seconds starting from 0

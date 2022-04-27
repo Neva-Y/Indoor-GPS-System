@@ -1,4 +1,4 @@
-load('Data/oldeng2.mat');
+load('Data/walkwithtim.mat');
 
 
 time = MagneticField.Timestamp;
