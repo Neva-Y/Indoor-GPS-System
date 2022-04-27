@@ -1,5 +1,5 @@
 % Load in walking data
-load('Data/oldeng2.mat')
+load('Data/southlawnwalk.mat')
 time = Acceleration.Timestamp;
 
 % Conversion of date-time format to seconds starting from 0
@@ -169,7 +169,7 @@ if exist('steps','var')
     accelZStrides = accelZ(timeStep);
     Amin = min(accelZStrides);
     Amax = max(accelZStrides);
-    stepLength = (Amax - Amin)^0.25 * 0.4;
+    stepLength = (Amax - Amin)^0.25
     j = 1;
     currentDistance = 0;
     cumDistance = zeros(length(t));
@@ -183,21 +183,19 @@ if exist('steps','var')
     
     
     % Calculate distance travelled using fixed step length
-%     aveStepAccel = sum(steps)/length(steps);
-%     stepLength = 0.5 * sqrt(aveStepAccel);
-%     
-%     j = 1;
-%     currentDistance = 0;
-%     cumDistance = zeros(length(t));
-%     for i = 1:length(t)
-%         if j<=length(timeStep) && i == timeStep(j)
-%             currentDistance = currentDistance + stepLength;
-%             j = j + 1;
-%         end
-%         cumDistance(i) = currentDistance;
-%     end
-
-    % Plot distance
+    aveStepAccel = sum(steps)/length(steps);
+    stepLength = 0.5 * sqrt(aveStepAccel);
+    
+    j = 1;
+    currentDistance = 0;
+    cumDistance = zeros(length(t));
+    for i = 1:length(t)
+        if j<=length(timeStep) && i == timeStep(j)
+            currentDistance = currentDistance + stepLength;
+            j = j + 1;
+        end
+        cumDistance(i) = currentDistance;
+    end
     figure();
     %measuredDistance = 30;
     plot(t, cumDistance);

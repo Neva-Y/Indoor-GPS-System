@@ -54,6 +54,7 @@ gyroAzimuth = initialHeading + yawEstimate;
 initial_min = double(minute(time(1)));
 initial_sec = double(second(time(1)));
 
+t = zeros(vectorLen);
 for i=1:length(time)
     currentmin = double(minute(time(i)));
     if currentmin == initial_min + 1
@@ -75,7 +76,7 @@ dt = 1/Fs;
 
 % Noise and Measurement Error
 Q = 1;
-R = 30000;
+R = 40000;
 
 %Initialise Covariance
 P = 1;
