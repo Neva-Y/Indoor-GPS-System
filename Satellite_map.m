@@ -1,7 +1,7 @@
 close all
 clc
 
-img = imread('oldeng.png');
+img = imread('oldeng2.png');
 img = imrotate(img,0,'bilinear','crop');
 %imagesc([-37.80005 -37.7988], [144.9609 144.9626],img);
 imagesc([-77 70], [-39 98], flipud(img));

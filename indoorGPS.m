@@ -13,8 +13,8 @@ j = 1;
 for i = 2:vectorLen
     if i == timeStep(j) && j < length(timeStep)
         j=j+1;
-        longditude(i) = longditude(i-1) + (cumDistance(i)-cumDistance(i-1))*sind(x(i));
-        latitude(i) = latitude(i-1) + (cumDistance(i)-cumDistance(i-1))*cosd(x(i));
+        longditude(i) = longditude(i-1) + stepLength*sind(x(i));
+        latitude(i) = latitude(i-1) + stepLength*cosd(x(i));
     else
         longditude(i) = longditude(i-1);
         latitude(i) = latitude(i-1);
@@ -37,5 +37,5 @@ set(gca,'ydir','normal');
 
 xlabel("Latitude (m)")
 xlabel("Longitude (m)")
-legend("Pedestrian Dead Reckoning", "GNSS location")
+legend("GNSS location", "Pedestrian Dead Reckoning")
 title("Walking Path")

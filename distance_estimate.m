@@ -1,5 +1,5 @@
 % Load in walking data
-load('Data/walkwithtim.mat')
+load('Data/oldeng2.mat')
 time = Acceleration.Timestamp;
 
 % Conversion of date-time format to seconds starting from 0
@@ -169,7 +169,7 @@ if exist('steps','var')
     accelZStrides = accelZ(timeStep);
     Amin = min(accelZStrides);
     Amax = max(accelZStrides);
-    stepLength = (Amax - Amin)^0.25 * 0.4;
+    stepLength = (Amax - Amin)^0.25 * 0.385;
     j = 1;
     currentDistance = 0;
     cumDistance = zeros(length(t));

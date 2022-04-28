@@ -1,4 +1,4 @@
-load('Data/walkwithtim.mat');
+load('Data/oldeng2.mat');
 
 
 time = MagneticField.Timestamp;
@@ -76,7 +76,7 @@ dt = 1/Fs;
 
 % Noise and Measurement Error
 Q = 1;
-R = 40000;
+R = 4000;
 
 %Initialise Covariance
 P = 1;
