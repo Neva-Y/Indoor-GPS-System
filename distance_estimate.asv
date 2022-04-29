@@ -29,25 +29,25 @@ function [cumDistance, timeStep] = distance_estimate(file, measuringAlgo)
     accelY = Acceleration.Y + 10;
     accelZ = Acceleration.Z + 0.07;
 
-%     plot(t,accelZ)
-%     p1 = plot(t,accelX,'r');
-%     hold on 
-%     p2 = plot(t,accelY,'g');
-%     p3 = plot(t,accelZ,'b');
-%     hold off
-%     legend([p1(1) p2(1) p3(1)], {'Acceleration X', 'Acceleration Y', 'Acceleration Z'})
-%     xlabel("Time (s)")
-%     ylabel("Acceleration (m/s^2)")
-%     title("3 Axis Acceleration Data")
-%     title("Z-Axis Acceleration Data")
+    %plot(t,accelZ)
+    % p1 = plot(t,accelX,'r');
+    % hold on 
+    % p2 = plot(t,accelY,'g');
+    % p3 = plot(t,accelZ,'b');
+    % hold off
+    % legend([p1(1) p2(1) p3(1)], {'Acceleration X', 'Acceleration Y', 'Acceleration Z'})
+    % xlabel("Time (s)")
+    % ylabel("Acceleration (m/s^2)")
+    % title("3 Axis Acceleration Data")
+    % title("Z-Axis Acceleration Data")
     accelNorm = sqrt(accelX.^2 + accelY.^2 + accelZ.^2);
-% 
+
     fs = 50; %Sampling Frequency (higher than the nyquist frequency)
-%     figure();
-%     plot(t, accelNorm)
-%     xlabel("Time (s)")
-%     ylabel("Acceleration (m/s^2)")
-%     title("Magnitude of Acceleration")
+    % figure();
+    % plot(t, accelNorm)
+    % xlabel("Time (s)")
+    % ylabel("Acceleration (m/s^2)")
+    % title("Magnitude of Acceleration")
 
     % Set minimum and maximum frequency ranges to avoid constant gravity noise
     % and high frequency noises
@@ -60,12 +60,12 @@ function [cumDistance, timeStep] = distance_estimate(file, measuringAlgo)
     Y = fftshift(Y);
     f = (-length(Y)/2:(length(Y)-1)/2)*fs/length(Y); % zero-centered frequency range
     m = abs(Y).^2/length(Y); % zero-centered power
-%     figure();
-%     plot(f,m)
-%     xlim([minFreq maxFreq])
-%     title("Relative Amplitude vs Frequency")
-%     xlabel("Frequency (Hz)")
-%     ylabel("Amplitude")
+    % figure();
+    % plot(f,m)
+    % xlim([minFreq maxFreq])
+    % title("Relative Amplitude vs Frequency")
+    % xlabel("Frequency (Hz)")
+    % ylabel("Amplitude")
 
     % Find Power Spectral Density 
     r = xcorr(accelNorm);
@@ -73,12 +73,12 @@ function [cumDistance, timeStep] = distance_estimate(file, measuringAlgo)
     PSD = fftshift(PSD);
     m = abs(PSD);
     f = (-length(PSD)/2:(length(PSD)-1)/2)*fs/length(PSD);
-    figure();
-    plot(f,m);
-    xlim([minFreq maxFreq])
-    title("Power Spectral Density")
-    xlabel("Frequency (Hz)")
-    ylabel("Power Density (W/Hz)") 
+    % figure();
+    % plot(f,m);
+    % xlim([minFreq maxFreq])
+    % title("Power Spectral Density")
+    % xlabel("Frequency (Hz)")
+    % ylabel("Power Density (W/Hz)") 
 
     % Find all the local peaks of the Frequency Spectrum
     [peaks, freqPeaks] = findpeaks(m);
@@ -94,8 +94,8 @@ function [cumDistance, timeStep] = distance_estimate(file, measuringAlgo)
             maxFreqIndex = freqPeaks(i);
         end
     end
-    hold on
-    plot (f(maxFreqIndex), maxPeak, 'o')
+    %hold on
+    %plot (f(maxFreqIndex), maxPeak, 'o')
 
     % Set a range of frequencies to take according to the dominant cadence
     freqWidth = 0.25;
@@ -109,23 +109,23 @@ function [cumDistance, timeStep] = distance_estimate(file, measuringAlgo)
     end
 
     % Plot the range of frequency allowed in the bandpass filter
-    hold on;
-    ylimits = double(ylim);
-    a = area([freqRange(1), freqRange(1), freqRange(2), freqRange(2)], [0, ylimits(2), ylimits(2), 0]);
-    a.FaceAlpha = 0.2;
+    %hold on;
+    %ylimits = double(ylim);
+    %a = area([freqRange(1), freqRange(1), freqRange(2), freqRange(2)], [0, ylimits(2), ylimits(2), 0]);
+    %a.FaceAlpha = 0.2;
 
     % 6th order bandpass filter for the determined frequency range
     [b,a] = butter(6, freqRange/(fs/2), 'bandpass');
-%     figure();
+    %figure();
     G=tf(b,a,1/fs); 
     % freqz(b,a,[],fs);
     % title("Sixth order bandpass filter Bode Plot")
     y=filter(b,a,accelNorm);
-    figure();
-    plot(t, y)
-    title("Filtered Acceleration Magnitude")
-    xlabel("Time (s)")
-    ylabel("Acceleration (m/s^2)")
+%     figure();
+%     plot(t, y)
+%     title("Filtered Acceleration Magnitude")
+%     xlabel("Time (s)")
+%     ylabel("Acceleration (m/s^2)")
 
     % Calculate the minimum peaks to determine a step based on the quarter of 
     % the measured maximum acceleration magnitude
@@ -160,21 +160,20 @@ function [cumDistance, timeStep] = distance_estimate(file, measuringAlgo)
     if measuringAlgo == "weinberg"
         if exist('steps','var')
             fprintf("The pedometer has detected %d steps\n", length(steps));
-            hold on
-            plot(t(timeStep), steps, 'o');
-            yline(minPeakMeasured,'-','Threshold');
-            xL=xlim;
-            yL=ylim;
-            str = "The pedometer has detected " +num2str(length(steps)) +" steps";
-            text(0.99*xL(2),0.99*yL(2),str,'HorizontalAlignment','right','VerticalAlignment','top')
+            %hold on
+            %plot(t(timeStep), steps, 'o');
+            %yline(minPeakMeasured,'-','Threshold');
+            %xL=xlim;
+            %yL=ylim;
+            %str = "The pedometer has detected " +num2str(length(steps)) +" steps";
+            %text(0.99*xL(2),0.99*yL(2),str,'HorizontalAlignment','right','VerticalAlignment','top')
 
             % Calculate distance travelled using weinberg step length
 
             accelZStrides = accelZ(timeStep);
             Amin = min(accelZStrides);
             Amax = max(accelZStrides);
-            %stepLength = (Amax - Amin)^0.25 * 0.385;
-            stepLength = (Amax - Amin)^0.25 * 0.33;
+            stepLength = (Amax - Amin)^0.25 * 0.385;
             j = 1;
             currentDistance = 0;
             for i = 1:length(t)
@@ -184,9 +183,9 @@ function [cumDistance, timeStep] = distance_estimate(file, measuringAlgo)
                 end
                 cumDistance(i) = currentDistance;
             end
-        end
        
         elseif measuringAlgo == "integrate"
+            print("INTEGREATE")
             cumDistance = cumtrapz(cumtrapz(accelX));
         end
 
@@ -205,7 +204,7 @@ function [cumDistance, timeStep] = distance_estimate(file, measuringAlgo)
     %         cumDistance(i) = currentDistance;
     %     end
 
-        % Plot distance
+%         % Plot distance
 %         figure();
 %         %measuredDistance = 30;
 %         plot(t, cumDistance);
@@ -215,4 +214,7 @@ function [cumDistance, timeStep] = distance_estimate(file, measuringAlgo)
 %         xlabel("Time (s)")
 %         ylabel("Distance (m)")
 
+    else
+        fprintf("The pedometer did not detect any steps\n")
+    end
 end

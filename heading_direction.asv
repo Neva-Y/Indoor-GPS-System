@@ -1,4 +1,4 @@
-function [vectorLen, x, lat, long, gyroAzimuth, azimuth, Orientationx, t, K, P] = heading_direction(file)
+function [vectorLen, x, lat, long, gyroAzimuth, azimuth, Orientationx, t] = heading_direction(file)
     load(file);
     lat = Position.latitude;
     long = Position.longitude;
@@ -68,14 +68,14 @@ function [vectorLen, x, lat, long, gyroAzimuth, azimuth, Orientationx, t, K, P] 
 
     % Q is the covariance of the gaussian noise for the modelling errors
     % R is the covariance of the gaussian noise for the measurement noise
-    Q = 0.001;
+    Q = 0.0003;
     R = 1.0585;
 
     %Initialise Covariance
     P = zeros(vectorLen,1);
     P(1) = 0;
     K = zeros(vectorLen,1);
-
+    K(
     %Initial state and state space model
     z = azimuth;
     x = zeros(vectorLen,1);   
@@ -86,24 +86,21 @@ function [vectorLen, x, lat, long, gyroAzimuth, azimuth, Orientationx, t, K, P] 
     H = 1;
 
     t = t(1:vectorLen);
+    figure();
     for i = 2:vectorLen
         % Prediction for state vector and covariance
         x(i) = F * x(i-1) + G * u(i-1);
-        P(i) = F * P(i-1) * F.' + Q;
+        P(i) = F * P(0) * F.' + Q;
         % Computing the Kalman gain, closer to 1 means a greater trust in
         % measurements
-        K(i) = P(i) * H.' * inv(H * P(i) * H.' + R);
+        K = P * H.' * inv(H * P * H.' + R);
+        plot(t(i),K)
+        hold on
         % Correction based on observation
-        x(i) = x(i) + K(i) * (z(i) - H * x(i));
-        P(i) = P(i) - K(i) * H * P(i);
+        x(i) = x(i) + K * (z(i) - H*x(i));
+        P(i) = P(i) - K * H * P(i);
     end
-    
-    figure();
-    plot(t(2:vectorLen), K(2:vectorLen));
-    title("Kalman Gain K over time")
-    figure();
-    plot(t,P);
-    title("Covariance P over time")
+
 
     % fig1 = figure();
     % plot(t,BBx, 'LineWidth', 1)
