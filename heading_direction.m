@@ -7,14 +7,14 @@ function [vectorLen, x, lat, long, gyroAzimuth, azimuth, Orientationx, t, K, P] 
     vectorLen = min([length(time), length(AngularVelocity.X), ...
         length(Orientation.X), length(MagneticField.X)]);
 
-    Bx = MagneticField.X;
-    By = MagneticField.Y;
-    Bz = MagneticField.Z;
+    Bx = MagneticField.X*10^-6;
+    By = MagneticField.Y*10^-6;
+    Bz = MagneticField.Z*10^-6;
     B = [Bx By Bz];
-    B = B*10^-6;
 
     [A,b] = magcal(B);
     B_cal = (B-b)*A;
+    
     Bx = B_cal(:,1);
     Bx = Bx(1:vectorLen);
     By = B_cal(:,2);
@@ -34,7 +34,7 @@ function [vectorLen, x, lat, long, gyroAzimuth, azimuth, Orientationx, t, K, P] 
 
     % Gain for yaw due to to deflection of vertical axis due to the Earth
     % elipsoid
-    yawGain = 1.1;
+    yawGain = 1.05;
     Wz = Wz(1:vectorLen) * yawGain;
 
 
